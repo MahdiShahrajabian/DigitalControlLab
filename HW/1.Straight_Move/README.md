@@ -6,7 +6,6 @@ This code includes the implementation of the P, PI, PD and PID controllers for s
 
 The P controller of the control system is slow, and there is a static error. With the PI controller the steady-state error disappeared, 
 but the control system is slow. The PD compensation accelerates the system, but there is a static error.
-
 With the PID controller, the control system became faster and the steady-state error has been decreased to zero.
 
 In order to better and simpler implementation the derivative part has been discretized with the backward difference approach
