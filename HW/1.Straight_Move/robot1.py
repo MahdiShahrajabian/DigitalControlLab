@@ -13,7 +13,14 @@ class MyRobot1(RCJSoccerRobot):
         while self.robot.step(TIME_STEP) != -1:
             if self.is_new_data():
                 data = self.get_new_data()  # noqa: F841
-                I_x = 0
+                global I
+                I = 0
+                global ex_prev
+                ex_prev = 0
+                global ux
+                global Kix
+                global ex
+                
                 while self.is_new_team_data():
                     team_data = self.get_new_team_data()  # noqa: F841
                     # Do something with team data
@@ -43,21 +50,56 @@ class MyRobot1(RCJSoccerRobot):
                 x = robot_pos[1]
                 ex = x - x_d
                 print("ex= {}".format(ex))
-                kix = 2
-                ux = 20*ex + I_x
                 
-                if ux>= 10:  # Saturation
+                PID_type = 'PID'
+                print("PID_type = {}".format(PID_type))
+                
+                if PID_type == 'P':
+                    # P controller Implementation 
+                    Kpx = 25
+                    P = Kpx*ex
+                    ux = P
+                elif PID_type == "PI":
+                    # PI controller Implementation 
+                    Kpx = 22
+                    Kix = 10
+                    P = Kpx*ex
+                    ux = P + I
+                elif PID_type == "PD":
+                    # PD controller Implementation 
+                    Kpx = 23   
+                    Kdx = 2     # Kd/T
+                    P = Kpx*ex
+                    D = Kdx * (ex-ex_prev)   # Backward Difference
+                    ux = P + D     
+                else:
+                    # PID controller Implementation 
+                    Kpx = 22   
+                    Kix = 10   # T*Ki
+                    Kdx = 1     # Kd/T
+                    P = Kpx*ex
+                    D = Kdx * (ex-ex_prev)   # Backward Difference
+                    ux = P + I + D
+                
+                # Saturation
+                if ux>= 10:  
                     ux = 10
-                if ux<=-10:
+                if ux<= -10:
                     ux = -10
                     
                 print("ux= {}".format(ux))
                 
-                # Set the speed to motorsd) 
+                # Set the speed to motors 
                 self.left_motor.setVelocity(ux) 
                 self.right_motor.setVelocity(ux)  
                 
                 # Update State
-                I_x = I_x + kix*ex   # FD
-                ex_old = ex
- 
+                if PID_type == "PI":
+                    I = I + Kix*ex   # Forward Difference
+                elif PID_type == "PD":
+                    ex_prev = ex
+                elif PID_type == "PID":
+                    I = I + Kix*ex
+                    ex_prev = ex       
+                else:
+                    pass
