@@ -56,7 +56,7 @@ class MyRobot1(RCJSoccerRobot):
                 # Distance PID controller    
                 d_d = 0.001
                 d = 1/strength
-                ed = d - d_prev
+                ed = d - d_d
                 print("ed= {}".format(ed))
                 
                 PID_type_d = 'PID'
