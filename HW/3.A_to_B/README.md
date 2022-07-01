@@ -1,5 +1,5 @@
 
-Title: The robot moves from A tp B point which these points are not on the same axis.
+Title: The robot moves from A to B point which these points are not on the same axis.
 
 This code generates the proper speed of robot motors for moving from A point to B.
 
