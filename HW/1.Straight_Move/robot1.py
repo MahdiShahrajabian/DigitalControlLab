@@ -13,13 +13,9 @@ class MyRobot1(RCJSoccerRobot):
         while self.robot.step(TIME_STEP) != -1:
             if self.is_new_data():
                 data = self.get_new_data()  # noqa: F841
-                global I
+                
                 I = 0
-                global ex_prev
                 ex_prev = 0
-                global ux
-                global Kix
-                global ex
                 
                 while self.is_new_team_data():
                     team_data = self.get_new_team_data()  # noqa: F841
